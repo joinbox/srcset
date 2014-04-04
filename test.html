@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html class="no-js">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width">
+
+		<script src="js/vendor/bower_components/jquery/dist/jquery.js"></script>
+		
+		<script src="js/vendor/bower_components/qunit/qunit/qunit.js"></script>
+		<link rel="stylesheet" href="js/vendor/bower_components/qunit/qunit/qunit.css">
+
+		<style>
+			img { 
+				visibility: hidden;
+				position: absolute;
+			}
+		</style>
+
+		<script src="src/jquery.srcset.js"></script>
+
+		<script>
+
+
+
+			var widths 		= [ 1500, 1200, 1000, 800 ]
+				, heights 	= [ 700, 500, 300 ];
+
+
+
+
+			// Returns the dimensions the image should have (just height OR width)
+			function getCorrectDimensions( values, screenSize) {
+
+				var size 	= undefined;
+
+				for( var i = 0; i < values.length; i++ ) {
+
+					// Take size until it doesn't fit any more
+					if( values[ i ] >= screenSize ) {
+						size = values[ i ];
+					}
+				}
+
+				if( !size ) {
+					size = values[ 0 ];
+				}
+
+		    	return size;
+
+			}
+
+
+
+
+
+			function testWidths() {
+
+		    	var img 	= $( "#img1" )
+		    		srcW	= getCorrectDimensions( widths, $( window ).width() * window.devicePixelRatio );
+
+	    		var src 	= "http://placehold.it/" + srcW + "x200/800"
+	    		
+		    	img.each (function() {
+	      			equal( img.attr( 'src' ), src, "Width fits (" + $( window ).width() + ")" );
+		    	} );
+
+			}
+
+
+
+			function testHeights() {
+
+		    	var img 	= $( "#img2" )
+		    		srcH	= getCorrectDimensions( heights, $( window ).height() * window.devicePixelRatio );
+	    		
+	    		var src 	= "http://placehold.it/200x" + srcH + "/800"
+
+		    	img.each (function() {
+	      			equal( img.attr( 'src' ), src, "Height fits (" + $( window ).height() + ")" );
+		    	} );
+
+			}
+
+
+
+
+
+			$( window ).resize( function() {
+
+				// Timeout: Let do the plugin it's job first – then test
+				setTimeout( function() {
+
+					test( "Right values on resize", function() {
+						testWidths();
+				    	testHeights();
+					} );
+
+				}, 1);
+
+			} );
+
+
+
+		    test( "Right init values", function() {
+		    	testWidths();
+		    	testHeights();
+
+		    	// Test DPI stuff
+		    	var dpi = window.devicePixelRatio;
+		    	var size = dpi >= 2 ? "400x400" : "300x300";
+		    	if( dpi <= 1 ) size = "200x200";
+
+	    		var src 	= "http://placehold.it/" + size + "/800"
+
+	      		equal( $( "#img3" ).attr( 'src' ), src, "DPI fits (" + dpi + ")" );
+
+    		});
+
+
+		</script>
+
+
+	</head>
+	<body>
+
+		<!-- Test for width -->
+		<img id="img1" data-srcset-base="http://placehold.it/" data-srcset-ext="/800" data-srcset="800x200 800w, 1200x200 1200w, 1500x200 1500w, 1000x200 1000w" />
+
+		<!-- Test for height -->
+		<img id="img2" data-srcset-base="http://placehold.it/" data-srcset-ext="/800" data-srcset="200x700 700h, 200x300 300h, 200x500 500h" />
+
+		<!-- Test for mixed height/width -->
+
+		<!-- Test for DPI -->
+		<img id="img3" data-srcset-base="http://placehold.it/" data-srcset-ext="/800" data-srcset="200x200 1x, 300x300 1.5x, 400x400 2x" />
+
+		<div id="qunit"></div>
+		<div id="qunit-fixture"></div>
+
+
+	</body>
+</html>
