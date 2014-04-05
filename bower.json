@@ -5,6 +5,13 @@
 	, "dependencies": {
 		"jqery"		: ">=1.10.0"
 	}
+	, "ignore"		: [
+		"tests"
+		, "js"
+		, "bower.json"
+		, "README.md"
+		, "LICENSE"
+	]
 	, "license"		: "MIT"
 	, "authors"		: [
 		{ 
