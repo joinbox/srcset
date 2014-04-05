@@ -34,7 +34,7 @@ on a screen 1500px wide and with 1x device pixel wide becomes
 
 ## Configuration
 
-# Options
+### Options available
 Currently there are only two options available: 
 
 ```javascript
@@ -50,7 +50,7 @@ Both are true by default.
 
 `updateOnResize`: Image size will be adjusted when browser window is resized.
 
-# Set globally
+### Set globally
 
 Set options globally before loading srcset plugin (this is the only way to prevent autoInit):
 
@@ -58,7 +58,7 @@ Set options globally before loading srcset plugin (this is the only way to preve
  	$.srcset = $.extend( { autoInit: false } );
 ```
 
-# Set image based
+### Set image based
 
 Set options when calling the plugin in an image: 
 
