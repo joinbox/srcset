@@ -5,8 +5,8 @@
 ( function( $, window, document, undefined ) {
 
 	var defaultOpts = {
-			autoInit: true
-			, updateOnResize: true
+			autoInit			: true
+			, updateOnResize	: true
 		}
 		, urlRegEx = /\s*(\S*)+/i
 		, heightRegEx = /\d+h/i
@@ -14,10 +14,10 @@
 		, dpiRegEx = /([\d\.]+)x\b/i
 
 	// Allow users to set options without initializing plugin:
-	// $.srcset[ "option" ] = x
+	// $.srcset = $.extend( $.srcset, { updateOnResize: false } )
+
 	$.srcset = $.extend( defaultOpts, $.srcset || {} )
 	
-
 	function getSrcSetOptions( srcset ) {
 		return {
 			url 	: urlRegEx.exec( srcset ) 				? urlRegEx.exec( srcset )[ 1 ] 					: undefined
@@ -175,26 +175,27 @@
 
 	$.fn.srcset = function( opts ) {
 
-		options = $.extend( $.srcset, opts );
+		// Use empty object as first argument or we will be changing $.srcset
+		options = $.extend( {}, $.srcset, opts || {} );
 	
 		$( this ).each( function() {
 			setSrc( $( this ) );
 			updateSrc( $( this ) );
 		} );
 
-
-		// Update src on resize?
-		$( window ).resize( function() {
+		if( options.updateOnResize ) {
 			
-			if( !options.updateOnResize ) {
-				return;
-			}
+			// Update src on resize?
+			$( window ).resize( function() {
 
-			$( this ).each( function() {
-				updateSrc( $( this ) );
-			} );
+				$( this ).each( function() {
+					updateSrc( $( this ) );
+				} );
 
-		}.bind( this ) );
+			}.bind( this ) );
+
+		}
+
 
 	}
 

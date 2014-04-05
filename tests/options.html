@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html class="no-js">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width">
+
+		<script src="../js/vendor/bower_components/jquery/dist/jquery.js"></script>
+		
+		<script src="../js/vendor/bower_components/qunit/qunit/qunit.js"></script>
+		<link rel="stylesheet" href="../js/vendor/bower_components/qunit/qunit/qunit.css">
+
+		<style>
+			img { 
+				visibility: hidden;
+				position: absolute;
+			}
+		</style>
+
+		<script>
+			$.srcset = $.extend( $.srcset, {
+				autoInit 			: false
+				, updateOnResize	: false
+			} );
+
+		</script>
+
+		<script src="../src/jquery.srcset.js"></script>
+
+		<script>
+
+			var widths 		= [ 1500, 1200, 1000, 800 ]
+				, heights 	= [ 700, 500, 300 ];
+
+
+			// Returns the dimensions the image should have (just height OR width)
+			function getCorrectDimensions( values, screenSize) {
+
+				var size 	= undefined;
+
+				for( var i = 0; i < values.length; i++ ) {
+
+					// Take size until it doesn't fit any more
+					if( values[ i ] >= screenSize ) {
+						size = values[ i ];
+					}
+				}
+
+				if( !size ) {
+					size = values[ 0 ];
+				}
+
+		    	return size;
+
+			}
+
+
+
+
+
+			function testWidths( img ) {
+
+		    	var srcW	= getCorrectDimensions( widths, $( window ).width() * window.devicePixelRatio );
+
+	    		var src 	= "http://placehold.it/" + srcW + "x200/800"
+	    		
+		    	img.each (function() {
+	      			equal( img.attr( 'src' ), src, "Width fits (" + $( window ).width() + ")" );
+		    	} );
+
+			}
+
+
+
+			function testHeights( img ) {
+
+		    	var srcH	= getCorrectDimensions( heights, $( window ).height() * window.devicePixelRatio );
+	    		
+	    		var src 	= "http://placehold.it/200x" + srcH + "/800"
+
+		    	img.each (function() {
+	      			equal( img.attr( 'src' ), src, "Height fits (" + $( window ).height() + ")" );
+		    	} );
+
+			}
+
+
+
+
+			// Image 1 should not change on resize – store initial URL
+			var img2Url 	= "http://placehold.it/200x" + getCorrectDimensions( heights, $( window ).height() * window.devicePixelRatio ) + "/800";
+
+
+
+
+		    test( "Right init values", function() {
+
+		    	equal( $( "#img1" ).attr( 'src' ), undefined, "src is undefined before calling srcset" );
+		    	equal( $( "#img2" ).attr( 'src' ), undefined, "src is undefined before calling srcset" );
+
+    		} );
+
+
+    		test( "src is updated on calling srcset()", function() {
+
+    			$( "#img1" ).srcset( { updateOnResize: true } );
+    			testWidths( $( "#img1" ) );
+
+    			// #img2 was not srcset() – src should still be undefined
+    			equal( $( "#img2" ).attr( 'src' ), undefined, "src on img2 is still undefined" );
+
+    		} );
+
+
+    		test( "options may be passed in through srcset(options)", function() {
+    			
+    			// updateOnResize is false (default setting)
+    			$( "#img2" ).srcset();
+    			equal( $( "#img2" ).attr( 'src' ), img2Url, "img2 gets the right source on init" );
+
+    		} );
+
+
+
+
+			$( window ).resize( function() {
+
+				// Timeout: Let do the plugin it's job first – then test
+				setTimeout( function() {
+
+					test( "Right values on resize", function() {
+
+						testWidths( $( "#img1" ) );
+						equal( $( "#img2" ).attr( 'src' ), img2Url, "#img2 doesn't resize" );
+
+					} );
+
+				}, 1);
+
+			} );
+
+
+
+		</script>
+
+
+	</head>
+	<body>
+
+		<h1>Test for options (on init and using plugin)</h1>
+		Test on devices with different device pixel ratios. Resize window to all different positions. Tests should always validate.
+
+		<!-- Test for width -->
+		<img id="img1" data-srcset-base="http://placehold.it/" data-srcset-ext="/800" data-srcset="800x200 800w, 1200x200 1200w, 1500x200 1500w, 1000x200 1000w" />
+
+		<!-- Test for height -->
+		<img id="img2" data-srcset-base="http://placehold.it/" data-srcset-ext="/800" data-srcset="200x700 700h, 200x300 300h, 200x500 500h" />
+
+		<div id="qunit"></div>
+		<div id="qunit-fixture"></div>
+
+
+	</body>
+</html>

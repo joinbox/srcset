@@ -6,10 +6,10 @@
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width">
 
-		<script src="js/vendor/bower_components/jquery/dist/jquery.js"></script>
+		<script src="../js/vendor/bower_components/jquery/dist/jquery.js"></script>
 		
-		<script src="js/vendor/bower_components/qunit/qunit/qunit.js"></script>
-		<link rel="stylesheet" href="js/vendor/bower_components/qunit/qunit/qunit.css">
+		<script src="../js/vendor/bower_components/qunit/qunit/qunit.js"></script>
+		<link rel="stylesheet" href="../js/vendor/bower_components/qunit/qunit/qunit.css">
 
 		<style>
 			img { 
@@ -18,7 +18,7 @@
 			}
 		</style>
 
-		<script src="src/jquery.srcset.js"></script>
+		<script src="../src/jquery.srcset.js"></script>
 
 		<script>
 
@@ -124,6 +124,9 @@
 
 	</head>
 	<body>
+
+		<h1>Init and reset test</h1>
+		Test on devices with different device pixel ratios. Resize window to all different positions. Tests should always validate.
 
 		<!-- Test for width -->
 		<img id="img1" data-srcset-base="http://placehold.it/" data-srcset-ext="/800" data-srcset="800x200 800w, 1200x200 1200w, 1500x200 1500w, 1000x200 1000w" />
