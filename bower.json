@@ -1,9 +1,9 @@
 {
 	"name"			: "jquery-sourceset"
-	, "version"		: "0.1.4"
+	, "version"		: "0.1.5"
 	, "main"		: "src/jquery.srcset.js"
 	, "dependencies": {
-		"jqery"		: ">=1.10.0"
+		"jquery"	: ">=1.10.0"
 	}
 	, "ignore"		: [
 		"tests"
