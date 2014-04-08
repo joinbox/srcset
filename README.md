@@ -68,4 +68,11 @@ Set options when calling the plugin in an image:
 
 ## Events
 
-Before an image is replaced, `beforeSrcReplace` is fired. After image has been replaced, `load` and `srcReplaced` are fired.
+Before an image's `src` attribute is set, `beforeSrcReplace` is fired on the `img` element. After the `src` has been replaced, `srcReplaced` is fired. 
+
+The events are fired on the initial `src` update as well as when the `src` attribute is replaced because the window has been resized (when the `updateOnResize` option is `true`).
+
+When no regular image src is provided, the image's load event is fired by the browser two times:
+
+* once before the image `src` attribute is replaced (test with `$( this ).attr( 'src' ) === undefined` )
+* once after the image has been replaced and it's src was loaded

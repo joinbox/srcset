@@ -30,6 +30,100 @@
 
 		<script>
 
+
+
+
+
+
+
+
+
+    		////////////////////////////////////////////
+    		//
+    		// Check if EVENTS are fired correctly
+    		//
+    		////////////////////////////////////////////
+
+    		// Number of times the load event was fired on an image with source undefined
+    		var imgsLoadedUndefined = 0
+
+    		// Number of times load event was fired on image with a src attribute (after srcset replace)
+    			, imgsLoadedWithSrc = 0
+
+    		// Number of times beforeSrcReplace was fired
+    			, beforeSrcReplaceFired = 0
+
+    		// Number of times srcReplaced was fired
+    			, srcReplacedFired = 0;
+
+    		$( function() {
+	    		
+    			var $imgs = $( "img[data-srcset]" );
+
+	    		$imgs
+		    		.on( 'load', function() {
+
+		    			// Load fired on image without source
+		    			if( $( this ).attr( 'src' ) === undefined ) {
+			    			imgsLoadedUndefined++;
+		    			}
+
+		    			// Load fired on image with source (after replace)
+		    			else {
+		    				imgsLoadedWithSrc++;
+		    			}
+
+		    		} )
+	    			.each( function() {
+	    				if( this.complete ) {
+	    					$( this ).load();
+	    				}
+	    			} );
+
+
+	    		$imgs.on( "srcReplaced", function( ev ) {
+
+    				srcReplacedFired++;
+
+	    		} );
+
+	    		$imgs.on( "beforeSrcReplace", function() {
+    				beforeSrcReplaceFired++;
+	    		})
+
+	    	
+	    	} );
+
+
+    		// After 2s all load events should be done (or check your internet connection)
+    		setTimeout( function() {
+
+    			test( "Load events are fired correctly", function() {
+
+    				equal( imgsLoadedWithSrc		, 2, "3 load events fired with src" );
+    				equal( imgsLoadedUndefined		, 2, "3 load events fired with src undefined" );
+    				equal( srcReplacedFired			, 2, "3 srcReplaced events fired" );
+    				equal( beforeSrcReplaceFired	, 2, "3 beforeSrcReplace events fired" );
+
+    			} );
+
+    		}, 2000 );
+
+
+
+
+
+
+
+
+
+
+    		////////////////////////////////////////////
+    		//
+    		// Check if images are set correctly on init
+    		//
+    		////////////////////////////////////////////
+
 			var widths 		= [ 1500, 1200, 1000, 800 ]
 				, heights 	= [ 700, 500, 300 ];
 
@@ -124,6 +218,15 @@
 
 
 
+
+
+    		////////////////////////////////////////////
+    		//
+    		// Window RESIZE
+    		//
+    		////////////////////////////////////////////
+
+
 			$( window ).resize( function() {
 
 				// Timeout: Let do the plugin it's job first – then test
@@ -139,6 +242,12 @@
 				}, 1);
 
 			} );
+
+
+
+
+
+
 
 
 

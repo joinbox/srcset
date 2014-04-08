@@ -159,11 +159,20 @@
 			return;
 		}
 
+		var imageUrl = ( img.data( 'srcset-base' ) || "" ) + data.url + ( img.data( 'srcset-ext' ) || "" );
+
+		// Image src doesn't change: Ne need to update src or fire events
+		if( img.attr( 'src' ) === imageUrl ) {
+			return;
+		}
+
+
 		img.trigger( "beforeSrcReplace" );
 
-		img.attr( 'src', img.data( 'srcset-base' ) + data.url + img.data( 'srcset-ext' ) );
+		// Update image source with new URL
+		img.attr( 'src', imageUrl );
 
-		img.trigger( "load" );
+		//img.trigger( "load" );
 		img.trigger( "srcReplaced" );
 
 

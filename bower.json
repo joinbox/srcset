@@ -1,6 +1,6 @@
 {
 	"name"			: "jquery-sourceset"
-	, "version"		: "0.1.5"
+	, "version"		: "0.1.6"
 	, "main"		: "src/jquery.srcset.js"
 	, "dependencies": {
 		"jquery"	: ">=1.10.0"
