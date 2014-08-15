@@ -103,6 +103,12 @@
 
 
 
+
+			// TODO: Test that no unnecessary src replacements are made (when resizing window but image size stays the same)
+
+
+
+
 		    test( "Right init values", function() {
 		    	testWidths();
 		    	testHeights();
@@ -126,7 +132,7 @@
 	<body>
 
 		<h1>Init and reset test</h1>
-		Test on devices with different device pixel ratios. Resize window to all different positions. Tests should always validate.
+		<p>Test on devices with different device pixel ratios. Resize window to all different positions. Tests should always validate.</p>
 
 		<!-- Test for width -->
 		<img id="img1" data-srcset-base="http://placehold.it/" data-srcset-ext="/800" data-srcset="800x200 800w, 1200x200 1200w, 1500x200 1500w, 1000x200 1000w" />

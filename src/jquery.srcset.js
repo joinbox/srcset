@@ -65,7 +65,7 @@
 	function updateSrc( img ) {
 
 		if( !img.data( 'srcset-sizes' ) ) {
-			console.log( "img %o has no data", img );
+			//console.log( "img %o has no data", img );
 			return;
 		}
 
