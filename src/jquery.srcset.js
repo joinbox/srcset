@@ -8,22 +8,21 @@
 			autoInit			: true
 			, updateOnResize	: true
 		}
-		, urlRegEx = /\s*(\S*)+/i
 		, heightRegEx = /\d+h/i
 		, widthRegEx = /\d+w/i
 		, dpiRegEx = /([\d\.]+)x\b/i
 
 	// Allow users to set options without initializing plugin:
 	// $.srcset = $.extend( $.srcset, { updateOnResize: false } )
-
+	
 	$.srcset = $.extend( defaultOpts, $.srcset || {} )
 	
-	function getSrcSetOptions( srcset ) {
+	function getSrcSetOptions( srcsetData ) {
 		return {
-			url 	: urlRegEx.exec( srcset ) 				? urlRegEx.exec( srcset )[ 1 ] 					: undefined
-			, w 	: widthRegEx.exec( srcset )				? parseInt( widthRegEx.exec( srcset )[ 0 ] ) 	: Infinity
-			, h 	: heightRegEx.exec( srcset ) 			? parseInt( heightRegEx.exec( srcset )[ 0 ] )	: Infinity
-			, dpi 	: parseFloat( dpiRegEx.exec( srcset )	? dpiRegEx.exec( srcset )[ 1 ] 					: 1 )
+			url 	: srcsetData.split( " " ).length > 0 		? srcsetData.split( " " )[ 0 ] 							: undefined // The use of the regex /\s*(\S*)+/i breaks compatibility with IE8 (see Issue # 1)
+			, w 	: widthRegEx.test( srcsetData )				? parseInt( widthRegEx.exec( srcsetData )[ 0 ] ) 	: Infinity
+			, h 	: heightRegEx.test( srcsetData ) 			? parseInt( heightRegEx.exec( srcsetData )[ 0 ] )	: Infinity
+			, dpi 	: parseFloat( dpiRegEx.test( srcsetData )	? dpiRegEx.exec( srcsetData )[ 1 ] 					: 1 )
 		}
 	}
 
@@ -36,10 +35,14 @@
 
 		for( var i = 0; i < srcsets.length; i++ ) {
 
-			var parsed = getSrcSetOptions( srcsets[ i ] );
+			// trim whitespaces
+			var parsed = getSrcSetOptions( srcsets[ i ].replace( /^\s*|\s*$/gi, '' ) );
+
+			console.log( "%o", parsed );
 
 			// No url provided
 			if( !parsed.url ) {
+				console.log( "Couldn't parse URL; got %o", parsed );
 				continue;
 			}
 
@@ -153,6 +156,7 @@
 
 
 		data = best.data;
+		console.log( data );
 
 		if( !data || !data.url ) {
 			console.log( "no src found for %o", img );
@@ -172,7 +176,6 @@
 		// Update image source with new URL
 		img.attr( 'src', imageUrl );
 
-		//img.trigger( "load" );
 		img.trigger( "srcReplaced" );
 
 
@@ -193,15 +196,17 @@
 		} );
 
 		if( options.updateOnResize ) {
-			
+
+			console.log( $ );
 			// Update src on resize?
-			$( window ).resize( function() {
+			$( window ).on( 'resize', function() {
 
 				$( this ).each( function() {
 					updateSrc( $( this ) );
 				} );
 
 			}.bind( this ) );
+			$( window );
 
 		}
 
