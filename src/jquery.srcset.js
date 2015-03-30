@@ -10,20 +10,18 @@
 		}
 		, heightRegEx = /\d+h/i
 		, widthRegEx = /\d+w/i
-		, dpiRegEx = /([\d\.]+)x\b/i
+		, dpiRegEx = /([\d\.]+)x\b/i;
 
 	// Allow users to set options without initializing plugin:
-	// $.srcset = $.extend( $.srcset, { updateOnResize: false } )
-	
-	$.srcset = $.extend( defaultOpts, $.srcset || {} )
+	$.srcset = $.extend( defaultOpts, $.srcset || {} );
 	
 	function getSrcSetOptions( srcsetData ) {
 		return {
-			url 	: srcsetData.split( " " ).length > 0 		? srcsetData.split( " " )[ 0 ] 							: undefined // The use of the regex /\s*(\S*)+/i breaks compatibility with IE8 (see Issue # 1)
+			url 	: srcsetData.split( " " ).length > 0 		? srcsetData.split( " " )[ 0 ] 						: undefined // The use of the regex /\s*(\S*)+/i breaks compatibility with IE8 (see Issue # 1)
 			, w 	: widthRegEx.test( srcsetData )				? parseInt( widthRegEx.exec( srcsetData )[ 0 ] ) 	: Infinity
 			, h 	: heightRegEx.test( srcsetData ) 			? parseInt( heightRegEx.exec( srcsetData )[ 0 ] )	: Infinity
 			, dpi 	: parseFloat( dpiRegEx.test( srcsetData )	? dpiRegEx.exec( srcsetData )[ 1 ] 					: 1 )
-		}
+		};
 	}
 
 
@@ -37,8 +35,6 @@
 
 			// trim whitespaces
 			var parsed = getSrcSetOptions( srcsets[ i ].replace( /^\s*|\s*$/gi, '' ) );
-
-			console.log( "%o", parsed );
 
 			// No url provided
 			if( !parsed.url ) {
@@ -68,7 +64,6 @@
 	function updateSrc( img ) {
 
 		if( !img.data( 'srcset-sizes' ) ) {
-			//console.log( "img %o has no data", img );
 			return;
 		}
 
@@ -89,7 +84,7 @@
 		var best = {
 			data 	: undefined
 			, diff 	: Infinity
-		}
+		};
 
 		// One entry
 		if( filteredData.length === 1 ) {
@@ -116,7 +111,7 @@
 
 				// Highest diff first
 				.sort( function( a, b ) {
-					return a.diff < b.diff
+					return a.diff < b.diff;
 				} )
 
 				// Go through data, halt on first that's diff is < 0 or last one
@@ -138,8 +133,8 @@
 				
 			for( var i = 0; i < filteredData.length; i++ ) {
 				
-				var wDiff = filteredData[ i ].w - w === Infinity ? 0 : filteredData[ i ].w * dpi - w
-					hDiff = filteredData[ i ].h - h === Infinity ? 0 : filteredData[ i ].h * dpi - h;
+				var   wDiff = filteredData[ i ].w - w === Infinity ? 0 : filteredData[ i ].w * dpi - w
+					, hDiff = filteredData[ i ].h - h === Infinity ? 0 : filteredData[ i ].h * dpi - h;
 
 				var diff = wDiff + hDiff;
 
@@ -156,10 +151,9 @@
 
 
 		data = best.data;
-		console.log( data );
 
 		if( !data || !data.url ) {
-			console.log( "no src found for %o", img );
+			console.log( "No src found for %o", img );
 			return;
 		}
 
@@ -197,7 +191,6 @@
 
 		if( options.updateOnResize ) {
 
-			console.log( $ );
 			// Update src on resize?
 			$( window ).on( 'resize', function() {
 
@@ -210,8 +203,7 @@
 
 		}
 
-
-	}
+	};
 
 
 
