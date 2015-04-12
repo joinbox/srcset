@@ -27,6 +27,7 @@
 
 
 	function setSrc( img ) {
+
 		var srcsetdata = img.data( 'srcset' )
 			, srcsets = srcsetdata.split( "," )
 			, data = [];
